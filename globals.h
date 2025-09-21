@@ -1,3 +1,5 @@
+// Protocolo OBD-II para Honda CB500X
+#define PROTOCOL_ISO_9141_2 0x33
 #ifndef GLOBALS_H
 #define GLOBALS_H
 

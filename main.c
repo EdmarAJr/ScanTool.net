@@ -165,6 +165,28 @@ static void init()
    {
       case READY:
          write_log("OK");
+         // --- Identificação Honda CB500X 2023 ---
+         {
+            char vin_response[64] = {0};
+            char mfr_response[64] = {0};
+            int status;
+            // Solicita VIN (PID 09 02)
+            send_command("0902");
+            status = read_comport(vin_response);
+            // Solicita fabricante (PID 09 0A)
+            send_command("090A");
+            status = read_comport(mfr_response);
+            // Verifica se é uma Honda CB500X 2023
+            if (strstr(vin_response, "MLHPC64") != NULL || strstr(mfr_response, "HONDA") != NULL) {
+               write_log("\nMotocicleta Honda CB500X 2023 detectada!");
+               // Suporte ao protocolo Honda JOBD/ISO 9141-2
+               comport.protocol = PROTOCOL_ISO_9141_2;
+               write_log("\nProtocolo ISO 9141-2 (Honda JOBD) selecionado automaticamente.");
+               // Aqui você pode ajustar variáveis globais, interface, sensores, etc.
+            } else {
+               write_log("\nVeículo conectado não é uma Honda CB500X 2023.");
+            }
+         }
          break;
 
       case NOT_OPEN:

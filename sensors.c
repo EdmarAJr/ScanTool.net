@@ -109,86 +109,17 @@ static volatile int refresh_time; // time between sensor updates
 
 static SENSOR sensors[] =
 {
-   // formula                        // label            //screen_buffer  //pid  //enabled // bytes
-   { throttle_position_formula,     "Absolute Throttle Position:",     "", "11",      0,    1 },
-   { engine_rpm_formula,            "Engine RPM:",                     "", "0C",      -1,   2 },
-   { vehicle_speed_formula,         "Vehicle Speed:",                  "", "0D",      0,    1 },
-   { engine_load_formula,           "Calculated Load Value:",          "", "04",      0,    1 },
-   { timing_advance_formula,        "Timing Advance (Cyl. #1):",       "", "0E",      0,    1 },
-   { intake_pressure_formula,       "Intake Manifold Pressure:",       "", "0B",      0,    1 },
-   { air_flow_rate_formula,         "Air Flow Rate (MAF sensor):",     "", "10",      0,    2 },
-   { fuel_system1_status_formula,   "Fuel System 1 Status:",           "", "03",      0,    2 },
-   { fuel_system2_status_formula,   "Fuel System 2 Status:",           "", "03",      0,    2 },
-   // Page 2
-   { short_term_fuel_trim_formula,  "Short Term Fuel Trim (Bank 1):",  "", "06",      0,    2 },
-   { long_term_fuel_trim_formula,   "Long Term Fuel Trim (Bank 1):",   "", "07",      0,    2 },
-   { short_term_fuel_trim_formula,  "Short Term Fuel Trim (Bank 2):",  "", "08",      0,    2 },
-   { long_term_fuel_trim_formula,   "Long Term Fuel Trim (Bank 2):",   "", "09",      0,    2 },
-   { intake_air_temp_formula,       "Intake Air Temperature:",         "", "0F",      0,    1 },
-   { coolant_temp_formula,          "Coolant Temperature:",            "", "05",      -1,   1 },
-   { fuel_pressure_formula,         "Fuel Pressure (gauge):",          "", "0A",      0,    1 },
-   { secondary_air_status_formula,  "Secondary air status:",           "", "12",      0,    1 },
-   { pto_status_formula,            "Power Take-Off Status:",          "", "1E",      0,    1 },
-   // Page 3
-   { o2_sensor_formula,             "O2 Sensor 1, Bank 1:",            "", "14",      0,    2 },
-   { o2_sensor_formula,             "O2 Sensor 2, Bank 1:",            "", "15",      0,    2 },
-   { o2_sensor_formula,             "O2 Sensor 3, Bank 1:",            "", "16",      0,    2 },
-   { o2_sensor_formula,             "O2 Sensor 4, Bank 1:",            "", "17",      0,    2 },
-   { o2_sensor_formula,             "O2 Sensor 1, Bank 2:",            "", "18",      0,    2 },
-   { o2_sensor_formula,             "O2 Sensor 2, Bank 2:",            "", "19",      0,    2 },
-   { o2_sensor_formula,             "O2 Sensor 3, Bank 2:",            "", "1A",      0,    2 },
-   { o2_sensor_formula,             "O2 Sensor 4, Bank 2:",            "", "1B",      0,    2 },
-   { obd_requirements_formula,      "OBD conforms to:",                "", "1C",      -1,   1 },
-   // Page 4
-   { o2_sensor_wrv_formula,         "O2 Sensor 1, Bank 1 (WR):",       "", "24",      0,    4 },    // o2 sensors (wide range), voltage
-   { o2_sensor_wrv_formula,         "O2 Sensor 2, Bank 1 (WR):",       "", "25",      0,    4 },
-   { o2_sensor_wrv_formula,         "O2 Sensor 3, Bank 1 (WR):",       "", "26",      0,    4 },
-   { o2_sensor_wrv_formula,         "O2 Sensor 4, Bank 1 (WR):",       "", "27",      0,    4 },
-   { o2_sensor_wrv_formula,         "O2 Sensor 1, Bank 2 (WR):",       "", "28",      0,    4 },
-   { o2_sensor_wrv_formula,         "O2 Sensor 2, Bank 2 (WR):",       "", "29",      0,    4 },
-   { o2_sensor_wrv_formula,         "O2 Sensor 3, Bank 2 (WR):",       "", "2A",      0,    4 },
-   { o2_sensor_wrv_formula,         "O2 Sensor 4, Bank 2 (WR):",       "", "2B",      0,    4 },
-   { engine_run_time_formula,       "Time Since Engine Start:",        "", "1F",      0,    2 },
-   // Page 5
-   { frp_relative_formula,          "FRP rel. to manifold vacuum:",    "", "22",      0,    2 },    // fuel rail pressure relative to manifold vacuum
-   { frp_widerange_formula,         "Fuel Pressure (gauge):",          "", "23",      0,    2 },    // fuel rail pressure (gauge), wide range
-   { commanded_egr_formula,         "Commanded EGR:",                  "", "2C",      0,    1 },
-   { egr_error_formula,             "EGR Error:",                      "", "2D",      0,    1 },
-   { evap_pct_formula,              "Commanded Evaporative Purge:",    "", "2E",      0,    1 },
-   { fuel_level_formula,            "Fuel Level Input:",               "", "2F",      0,    1 },
-   { warm_ups_formula,              "Warm-ups since ECU reset:",       "", "30",      0,    1 },
-   { clr_distance_formula,          "Distance since ECU reset:",       "", "31",      0,    2 },
-   { evap_vp_formula,               "Evap System Vapor Pressure:",     "", "32",      0,    2 },
-   // Page 6
-   { o2_sensor_wrc_formula,         "O2 Sensor 1, Bank 1 (WR):",       "", "34",      0,    4 },   // o2 sensors (wide range), current
-   { o2_sensor_wrc_formula,         "O2 Sensor 2, Bank 1 (WR):",       "", "35",      0,    4 },
-   { o2_sensor_wrc_formula,         "O2 Sensor 3, Bank 1 (WR):",       "", "36",      0,    4 },
-   { o2_sensor_wrc_formula,         "O2 Sensor 4, Bank 1 (WR):",       "", "37",      0,    4 },
-   { o2_sensor_wrc_formula,         "O2 Sensor 1, Bank 2 (WR):",       "", "38",      0,    4 },
-   { o2_sensor_wrc_formula,         "O2 Sensor 2, Bank 2 (WR):",       "", "39",      0,    4 },
-   { o2_sensor_wrc_formula,         "O2 Sensor 3, Bank 2 (WR):",       "", "3A",      0,    4 },
-   { o2_sensor_wrc_formula,         "O2 Sensor 4, Bank 2 (WR):",       "", "3B",      0,    4 },
-   { mil_distance_formula,          "Distance since MIL activated:",   "", "21",      0,    2 },
-   // Page 7
-   { baro_pressure_formula,         "Barometric Pressure (absolute):", "", "33",      0,    1 },
-   { cat_temp_formula,              "CAT Temperature, B1S1:",          "", "3C",      0,    2 },
-   { cat_temp_formula,              "CAT Temperature, B2S1:",          "", "3D",      0,    2 },
-   { cat_temp_formula,              "CAT Temperature, B1S2:",          "", "3E",      0,    2 },
-   { cat_temp_formula,              "CAT Temperature, B2S2:",          "", "3F",      0,    2 },
-   { ecu_voltage_formula,           "ECU voltage:",                    "", "42",      0,    2 },
-   { abs_load_formula,              "Absolute Engine Load:",           "", "43",      0,    2 },
-   { eq_ratio_formula,              "Commanded Equivalence Ratio:",    "", "44",      0,    2 },
-   { amb_air_temp_formula,          "Ambient Air Temperature:",        "", "46",      0,    1 },  // same scaling as $0F
-   // Page 8
-   { relative_tp_formula,           "Relative Throttle Position:",     "", "45",      0,    1 },
-   { abs_tp_formula,                "Absolute Throttle Position B:",   "", "47",      0,    1 },
-   { abs_tp_formula,                "Absolute Throttle Position C:",   "", "48",      0,    1 },
-   { abs_tp_formula,                "Accelerator Pedal Position D:",   "", "49",      0,    1 },
-   { abs_tp_formula,                "Accelerator Pedal Position E:",   "", "4A",      0,    1 },
-   { abs_tp_formula,                "Accelerator Pedal Position F:",   "", "4B",      0,    1 },
-   { tac_pct_formula,               "Comm. Throttle Actuator Cntrl:",  "", "4C",      0,    1 }, // commanded TAC
-   { mil_time_formula,              "Engine running while MIL on:",    "", "4D",      0,    2 }, // minutes run by the engine while MIL activated
-   { clr_time_formula,              "Time since DTCs cleared:",        "", "4E",      0,    2 },
+   // Sensores relevantes para Honda CB500X 2023
+   { engine_rpm_formula,            "Engine RPM:",                     "", "0C",      1,    2 },
+   { vehicle_speed_formula,         "Vehicle Speed:",                  "", "0D",      1,    1 },
+   { coolant_temp_formula,          "Coolant Temperature:",            "", "05",      1,    1 },
+   { throttle_position_formula,     "Throttle Position:",               "", "11",      1,    1 },
+   { intake_pressure_formula,       "Intake Manifold Pressure:",       "", "0B",      1,    1 },
+   { intake_air_temp_formula,       "Intake Air Temperature:",         "", "0F",      1,    1 },
+   { o2_sensor_formula,             "O2 Sensor 1:",                    "", "14",      1,    2 },
+   { fuel_level_formula,            "Fuel Level Input:",               "", "2F",      1,    1 },
+   { engine_load_formula,           "Engine Load:",                    "", "04",      1,    1 },
+   { obd_requirements_formula,      "OBD conforms to:",                "", "1C",      1,    1 },
    { NULL,                          "",                                "", "",        0,    0 }
 };
 
