@@ -15,6 +15,6 @@
    #define SCANTOOL_PLATFORM_STR   "DOS"
 #endif
 
-#define SCANTOOL_COPYRIGHT_STR     "Copyright © " SCANTOOL_YEAR_STR " ScanTool.net, LLC"
+#define SCANTOOL_COPYRIGHT_STR     "Copyright (c) " SCANTOOL_YEAR_STR " ScanTool.net, LLC"
 
 #endif

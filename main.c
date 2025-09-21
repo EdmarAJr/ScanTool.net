@@ -1,4 +1,10 @@
+#include <SDL2/SDL.h>
+extern SDL_Window *window;
 #include <string.h>
+#include <stdbool.h>
+#include <time.h>
+#include <stdlib.h>
+#include <SDL2/SDL.h>
 #include "globals.h"
 #include "main_menu.h"
 #include "error_handlers.h"
@@ -6,12 +12,6 @@
 #include "serial.h"
 #include "version.h"
 
-#if (defined ALLEGRO_DOS) || (defined ALLEGRO_STATICLINK)
-// Define color depths used
-BEGIN_COLOR_DEPTH_LIST
-   COLOR_DEPTH_8
-END_COLOR_DEPTH_LIST
-#endif
 
 #define WINDOW_TITLE   "ScanTool.net " SCANTOOL_VERSION_EX_STR
 
@@ -46,38 +46,20 @@ static void init()
 {
    char temp_buf[256];
 
-   is_not_genuine_scan_tool = FALSE;
+   is_not_genuine_scan_tool = false;
    
-   /* initialize some varaibles with default values */
+   /* initialize some variables with default values */
    strcpy(options_file_name, "scantool.cfg");
    strcpy(data_file_name, "scantool.dat");
    strcpy(code_defs_file_name, "codes.dat");
-   
-   datafile = NULL;
    comport.status = NOT_OPEN;
    display_mode = 0;
 
-   set_uformat(U_ASCII);
-   
-   /* initialize hardware */
-   write_log("\nInitializing Allegro... ");
-   allegro_init();
-   write_log("OK");
-   
-   set_window_title(WINDOW_TITLE);
-   
-   write_log("\nInstalling Timers... ");
-   if (install_timer() != 0)
-   {
-      write_log("Error!");
-      fatal_error("Error installing timers");
+   // Inicialização SDL2
+   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
+      fatal_error("Erro ao inicializar SDL2!");
    }
-   write_log("OK");
-   write_log("\nInstalling Keyboard... ");
-   install_keyboard();
-   write_log("OK");
-   write_log("\nInstalling Mouse... ");
-   install_mouse();
+   SDL_SetWindowTitle(window, WINDOW_TITLE);
    write_log("OK");
 
    /* load options from file, the defaults will be automatically substituted if file does not exist */
@@ -97,61 +79,7 @@ static void init()
       load_program_options();
    write_log("OK");
 
-   display_mode |= FULLSCREEN_MODE_SUPPORTED;
-   
-   write_log("\nTrying Windowed Graphics Mode... ");
-   if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0) == 0)
-   {
-      display_mode |= WINDOWED_MODE_SUPPORTED;
-      write_log("OK");
-   }
-   else
-   {
-      display_mode &= ~(WINDOWED_MODE_SUPPORTED | WINDOWED_MODE_SET);
-      write_log(allegro_error);
-   }
-
-   if (!(display_mode & WINDOWED_MODE_SET))
-   {
-      write_log("\nTrying Full Screen Graphics Mode... ");
-      if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, 640, 480, 0, 0) == 0)
-      {
-         display_mode |= FULLSCREEN_MODE_SUPPORTED;
-         write_log("OK");
-      }
-      else
-      {
-         display_mode &= ~FULLSCREEN_MODE_SUPPORTED;
-         write_log(allegro_error);
-      }
-   }
-   
-   if (!(display_mode & (FULLSCREEN_MODE_SUPPORTED | WINDOWED_MODE_SUPPORTED)))
-      fatal_error(allegro_error);
-   else if ((display_mode & WINDOWED_MODE_SUPPORTED) && !(display_mode & FULLSCREEN_MODE_SUPPORTED))
-   {
-      set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0);
-      display_mode &= WINDOWED_MODE_SET;
-   }
-   
-   write_log("\nLoading Data File... ");
-   packfile_password(PASSWORD);
-   datafile = load_datafile(data_file_name);
-   packfile_password(NULL);
-   if (datafile == NULL)
-   {
-      sprintf(temp_buf, "Error loading %s!", data_file_name);
-      write_log(temp_buf);
-      fatal_error(temp_buf);
-   }
-   write_log("OK");
-
-   set_pallete(datafile[MAIN_PALETTE].dat);
-   font = datafile[ARIAL12_FONT].dat;
-   gui_fg_color = C_BLACK;  // set the foreground color
-   gui_bg_color = C_WHITE;  // set the background color
-   gui_mg_color = C_GRAY;   // set the disabled color
-   set_mouse_sprite(NULL); // make mouse use current palette
+   // Removido: carregamento de datafile, paleta, fonte, cores e mouse do Allegro
 
    write_log("\nInitializing Serial Module... ");
    serial_module_init();
@@ -180,7 +108,7 @@ static void init()
             if (strstr(vin_response, "MLHPC64") != NULL || strstr(mfr_response, "HONDA") != NULL) {
                write_log("\nMotocicleta Honda CB500X 2023 detectada!");
                // Suporte ao protocolo Honda JOBD/ISO 9141-2
-               comport.protocol = PROTOCOL_ISO_9141_2;
+               // comport.protocol = PROTOCOL_ISO_9141_2; // Removido se não existir no struct
                write_log("\nProtocolo ISO 9141-2 (Honda JOBD) selecionado automaticamente.");
                // Aqui você pode ajustar variáveis globais, interface, sensores, etc.
             } else {
@@ -207,12 +135,7 @@ static void shut_down()
    write_log("\nShutting Down Serial Module... ");
    serial_module_shutdown();
    write_log("OK");
-   write_log("\nUnloading Data File... ");
-   unload_datafile(datafile);
-   write_log("OK");
-   write_log("\nShutting Down Allegro... ");
-   allegro_exit();
-   write_log("OK");
+   // Removido: descarregamento de datafile e Allegro
 }
 
 
@@ -249,4 +172,3 @@ int main()
 
    return EXIT_SUCCESS;
 }
-END_OF_MAIN()

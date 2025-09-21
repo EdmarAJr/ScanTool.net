@@ -4,7 +4,7 @@
 #define GLOBALS_H
 
 #include <stdio.h>
-#include <allegro.h>
+#include <stdbool.h>
 #include "resource.h"
 
 
@@ -12,8 +12,8 @@
 
 // system_of_measurements
 #define METRIC     0
-#define IMPERIAL   1
-#define BRITISH    2
+//#define IMPERIAL   1
+//#define BRITISH    2
 
 // Display mode flags
 #define FULL_SCREEN_MODE            0
@@ -59,7 +59,5 @@ void write_log(const char *log_string);
 #ifdef LOG_COMMS
 void write_comm_log(const char *marker, const char *data);
 #endif
-
-DATAFILE *datafile;
 
 #endif

@@ -8,7 +8,6 @@
    #define BAUD_RATE_230400  230400
 #else
    #define DZCOMM_SECONDARY_INCLUDE
-   #include <dzcomm.h>
    #define BAUD_RATE_9600    _9600
    #define BAUD_RATE_38400   _38400
    #define BAUD_RATE_115200  _115200

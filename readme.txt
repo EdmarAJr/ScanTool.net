@@ -29,24 +29,43 @@ Coolant Temperature, and Timing Advance.
 For more information about the ElmScan OBD-II interface, please visit 
 our website, located at http://www.ScanTool.net.
 
+
 ======================================
-===== Minimum System Requirements ====
+===== Requisitos Mínimos (2025) ======
 ======================================
 
-Windows:
-   - 486DX 25Mhz Processor or better
-   - 4Mb RAM
-   - Windows 95 or higher
-   - DirectX 7 or newer
-   - 640x480 display
-   - Serial port
+Linux:
+   - Processador x86 ou ARM
+   - 128Mb RAM
+   - Linux Ubuntu 24.04 ou superior
+   - SDL2 e SDL2_ttf instalados
+   - Display 800x480 ou superior
+   - Porta serial (USB/RS232)
 
-DOS:
-   - 386SX 10Mhz Processor or better
-   - 1Mb RAM
-   - DOS v3.0
-   - 640x480 display
-   - Serial port
+======================================
+========== Compilação ================
+======================================
+
+1. Instale as dependências:
+   - SDL2: sudo apt install libsdl2-dev
+   - SDL2_ttf: sudo apt install libsdl2-ttf-dev
+2. Compile com:
+   gcc *.c -o scantool -lSDL2 -lSDL2_ttf
+3. Execute com:
+   ./scantool
+
+======================================
+========== Novidades 2025 ============
+======================================
+
+- Migração completa do sistema gráfico para SDL2/SDL2_ttf
+- Compatível com Linux (Windows/Allegro removido)
+- Sistema de medidas apenas métrico
+- Interface adaptada para motocicleta Honda CB500X
+- Diálogos e botões redesenhados com SDL2
+- Remoção total de código legado Allegro/DIALOG
+- Serial adaptado para POSIX/termios
+
 
 ======================================
 ========== Troubleshooting ===========
@@ -55,62 +74,26 @@ DOS:
 If you are having problems running the software, please visit our
 Support Page located at http://www.scantool.net/support
 
+
 ======================================
-========== Version History ===========
+========== Histórico de Versões ======
 ======================================
 
-   v1.21  -  Made 115.2k baud rate the default
-   v1.20  -  Added dynamic COM port selector (now works with COM port numbers > COM8)
-             Fixed program freeze when opening Bluetooth COM ports
-             Fixed potential data errors due to ELM327 UART silicone errata
-             Implemented firmware version printing for new FW releases of OBDLink and OBDLink CI
-             A few small bugfixes
-   v1.15  -  Added support for ElmScan 5 Compact
-             Added support for OBDLink and OBDLink CI devices
-             Defaults can now be set by simply deleting the CFG file
-             Fixed sensor pages with all sensors disabled causing other pages to delay first refresh by up to 10 seconds
-             Fixed 100% CPU usage
-   v1.14  -  Added 115.2k & 230.4k baud rates to options (May 23, 2008)
-             Added genuine scan tool validation
-   v1.13  -  Fixed some formatting, precision, and conversion errors in sensor formulas
-             Fixed inconsistent refresh rate display in Sensor Data
-             Refined handling of number of DTCs reported being different from number of DTCs read
-             Small bug fixes
-   v1.12  -  Refined error descriptions for ELM327
-             CAN DTC responses are now handled properly
-             SAE-defined DTCs with no description are now not identified as manufacturer-defined
-             Expanded Clear Codes warning to describe all things that will be cleared
-             Misc. bug fixes
-   v1.11  -  Fixed a bug in Display Codes dialog, where the program would crash under some conditions
-             Refined "COM Port Could not be Open" error handling
-   v1.10  -  Added baud rate switching
-             Made compatible with ELM327
-             Added protocol detection to reset interface dialog
-             Added pending DTCs
-             DTCs are now read even if ECU reports 0 codes
-             Added OBD Information dialog
-             Cleaned up Main Menu
-             Updated About dialog
-             Misc. bug/cosmetic fixes
-   v1.09  -  Fixed erroneous interpretation of 7F responses (KWP2000)
-             Fixed number of codes reporting in Trouble Codes
-             Fixed possible incorrect DTC interpretation when more than one response is received
-   v1.08  -  Fixed problem with ECUs that pad the response with 0's
-   v1.07  -  Added the rest of the sensors defined in SAE J1979 (APR2002)
-             Added the rest of "designed to comply with" to Sensor Data
-             Cleaned up portions of the code
-             Added COM ports 5-8 to Options
-             Updated codes.dat with latest generic P and U codes, and removed B and C codes
-             System information dialog supports a wider range of processors and platforms
-   v1.06  -  Fixed some problems with RS232
-             Corrected air flow rate formula (US system)
-             Added 16 new sensors
-             Modified the layout of "Sensor Data"
-             Misc. bug fixes
-   v1.04  -  Updated serial library
-             Some bug fixes and enhancements
-             Support for multiple platforms and compilers
-   v1.03  -  Fixed incorrect display of some sensors when ELM323 is used
-   v1.02  -  Minor bug fixes
-   v1.01  -  Minor bug fixes
-   v1.00  -  Initial release
+   v2.00  -  (2025) Migração total para SDL2/SDL2_ttf, compatibilidade Linux, sistema métrico, interface Honda CB500X, serial POSIX, remoção de Allegro/DIALOG, diálogos SDL2
+   v1.21  -  Baud rate padrão 115.2k
+   v1.20  -  Seleção dinâmica de porta COM, correções Bluetooth, erros UART ELM327, impressão de versão de firmware, bugfixes
+   v1.15  -  Suporte ElmScan 5 Compact, OBDLink/OBDLink CI, CFG por exclusão, correção de sensores desabilitados, CPU 100%, bugfixes
+   v1.14  -  Novos baud rates, validação scan tool
+   v1.13  -  Correções de fórmulas, taxa de atualização, DTCs, bugfixes
+   v1.12  -  Descrições de erro ELM327, respostas CAN DTC, warning Clear Codes, bugfixes
+   v1.11  -  Correção Display Codes crash, erro porta COM
+   v1.10  -  Baud rate switching, ELM327, detecção protocolo, pending DTCs, OBD Info, Main Menu, About, bugfixes
+   v1.09  -  Correção 7F KWP2000, número de códigos, DTCs múltiplos
+   v1.08  -  Correção ECUs padding 0
+   v1.07  -  Novos sensores SAE J1979, Sensor Data, código, COM 5-8, codes.dat atualizado, info sistema
+   v1.06  -  Correção RS232, fórmula US, novos sensores, layout Sensor Data, bugfixes
+   v1.04  -  Biblioteca serial atualizada, bugfixes, suporte multiplataforma
+   v1.03  -  Correção sensores ELM323
+   v1.02  -  Bugfixes
+   v1.01  -  Bugfixes
+   v1.00  -  Lançamento inicial
